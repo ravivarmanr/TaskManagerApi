@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TaskManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Parent_Task_Tbl">
+          <Key>
+            <PropertyRef Name="Parent_ID" />
+          </Key>
+          <Property Name="Parent_ID" Type="int" Nullable="false" />
+          <Property Name="Parent_Task" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="Task_Tbl">
+          <Key>
+            <PropertyRef Name="Task_ID" />
+          </Key>
+          <Property Name="Task_ID" Type="int" Nullable="false" />
+          <Property Name="Parent_ID" Type="int" />
+          <Property Name="Task" Type="nvarchar" MaxLength="150" />
+          <Property Name="Start_Date" Type="date" />
+          <Property Name="End_Date" Type="date" />
+          <Property Name="Priority" Type="int" />
+          <Property Name="Task_Status" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityContainer Name="TaskManagerModelStoreContainer">
+          <EntitySet Name="Parent_Task_Tbl" EntityType="Self.Parent_Task_Tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Task_Tbl" EntityType="Self.Task_Tbl" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TaskManagerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Parent_Task_Tbl">
+          <Key>
+            <PropertyRef Name="Parent_ID" />
+          </Key>
+          <Property Name="Parent_ID" Type="Int32" Nullable="false" />
+          <Property Name="Parent_Task" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Task_Tbl" Relationship="Self.FK_Task_Tbl_Task_Tbl" FromRole="Parent_Task_Tbl" ToRole="Task_Tbl" />
+        </EntityType>
+        <EntityType Name="Task_Tbl">
+          <Key>
+            <PropertyRef Name="Task_ID" />
+          </Key>
+          <Property Name="Task_ID" Type="Int32" Nullable="false" />
+          <Property Name="Parent_ID" Type="Int32" />
+          <Property Name="Task" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Start_Date" Type="DateTime" Precision="0" />
+          <Property Name="End_Date" Type="DateTime" Precision="0" />
+          <Property Name="Priority" Type="Int32" />
+          <NavigationProperty Name="Parent_Task_Tbl" Relationship="Self.FK_Task_Tbl_Task_Tbl" FromRole="Task_Tbl" ToRole="Parent_Task_Tbl" />
+          <Property Name="Task_Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Task_Tbl_Task_Tbl">
+          <End Role="Parent_Task_Tbl" Type="Self.Parent_Task_Tbl" Multiplicity="0..1" />
+          <End Role="Task_Tbl" Type="Self.Task_Tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Parent_Task_Tbl">
+              <PropertyRef Name="Parent_ID" />
+            </Principal>
+            <Dependent Role="Task_Tbl">
+              <PropertyRef Name="Parent_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TaskManagerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Parent_Task_Tbl" EntityType="Self.Parent_Task_Tbl" />
+          <EntitySet Name="Task_Tbl" EntityType="Self.Task_Tbl" />
+          <AssociationSet Name="FK_Task_Tbl_Task_Tbl" Association="Self.FK_Task_Tbl_Task_Tbl">
+            <End Role="Parent_Task_Tbl" EntitySet="Parent_Task_Tbl" />
+            <End Role="Task_Tbl" EntitySet="Task_Tbl" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TaskManagerModelStoreContainer" CdmEntityContainer="TaskManagerEntities">
+          <EntitySetMapping Name="Parent_Task_Tbl">
+            <EntityTypeMapping TypeName="TaskManagerModel.Parent_Task_Tbl">
+              <MappingFragment StoreEntitySet="Parent_Task_Tbl">
+                <ScalarProperty Name="Parent_ID" ColumnName="Parent_ID" />
+                <ScalarProperty Name="Parent_Task" ColumnName="Parent_Task" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Task_Tbl">
+            <EntityTypeMapping TypeName="TaskManagerModel.Task_Tbl">
+              <MappingFragment StoreEntitySet="Task_Tbl">
+                <ScalarProperty Name="Task_Status" ColumnName="Task_Status" />
+                <ScalarProperty Name="Task_ID" ColumnName="Task_ID" />
+                <ScalarProperty Name="Parent_ID" ColumnName="Parent_ID" />
+                <ScalarProperty Name="Task" ColumnName="Task" />
+                <ScalarProperty Name="Start_Date" ColumnName="Start_Date" />
+                <ScalarProperty Name="End_Date" ColumnName="End_Date" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
